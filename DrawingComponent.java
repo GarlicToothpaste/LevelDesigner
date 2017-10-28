@@ -7,21 +7,30 @@ import java.util.*;
 public class DrawingComponent extends JComponent{
 	int width, height;
 	Node node1;
+	Buttons addNode,addEdge,saveLevel;
 	private ArrayList<Shape> shapes = new ArrayList<>();
-    private Color Background;
+    private Paint Background;
 
 	public DrawingComponent(int x, int y){
 		width=x;
 		height=y;
-		Background=new Color(102, 152, 255);
-		node1= new Node(400,400,10,Color.BLACK,Color.BLACK,new BasicStroke(1));
+		Background= Color.BLACK;
+		node1= new Node(400,400,40,Color.WHITE);
+		addNode =new Buttons(20,20,120,30,Color.WHITE,"Add Node");
+		addEdge =new Buttons(150,20,120,30,Color.WHITE,"Add Edge");
+		saveLevel = new Buttons(280,20,140,30,Color.WHITE,"Save Level");
+
 	}
 	protected void paintComponent (Graphics g){
 		Graphics2D g2d = (Graphics2D) g;
-      	GradientPaint gp = new GradientPaint(0,0,Background,0,height+200,Color.WHITE);
-       	g2d.setPaint(gp);
-       	g2d.fillRect(0,0,width+300,height);
+       	g2d.setPaint(Background);
+       	g2d.fillRect(0,0,width,height);
 
+       	g2d.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON));
+       	
        	node1.draw(g2d);
+       	addNode.draw(g2d);
+       	addEdge.draw(g2d);
+       	saveLevel.draw(g2d);
 	}
 }
