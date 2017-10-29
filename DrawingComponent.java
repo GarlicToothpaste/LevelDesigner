@@ -32,5 +32,39 @@ public class DrawingComponent extends JComponent{
        	addNode.draw(g2d);
        	addEdge.draw(g2d);
        	saveLevel.draw(g2d);
+
+       	this.addMouseListener(new bListener());
 	}
+
+		public class bListener implements MouseListener{
+			public void mouseReleased(MouseEvent e){
+
+			}
+			public void mouseEntered(MouseEvent e){
+
+			}
+			public void mouseExited(MouseEvent e){
+
+			}
+			public void mouseClicked(MouseEvent e){
+
+			}
+			public void mousePressed(MouseEvent e){
+				int mx = e.getX();
+				int my = e.getY();
+				if(my>=20 && my<=50){
+					//If add Node is Clicked
+					if(mx>=20 && mx<=140){
+						System.out.println("Add Node Button Clicked!");
+					}
+					//If add Edge is Clicked
+					if(mx>=150 && mx<=270){
+						System.out.println("Edd Edge Button Clicked!");
+					}
+					if(mx>=280 && mx<=420){
+						System.out.println("Save Level Button Clicked!");
+					}
+				}
+			}
+		}
 }
