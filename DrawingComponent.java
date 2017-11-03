@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.util.*;
+import java.io.*;
 
 public class DrawingComponent extends JComponent{
 	int width, height;
@@ -11,7 +12,7 @@ public class DrawingComponent extends JComponent{
 	ArrayList<Node> nodes = new ArrayList<>();
     private Paint Background;
     double mx,my;
-
+    PrintWriter level;
 	public DrawingComponent(int x, int y){
 		width=x;
 		height=y;
@@ -20,9 +21,10 @@ public class DrawingComponent extends JComponent{
 		addNode =new Buttons(20,20,120,30,Color.WHITE,"Add Node");
 		addEdge =new Buttons(150,20,120,30,Color.WHITE,"Add Edge");
 		saveLevel = new Buttons(280,20,140,30,Color.WHITE,"Save Level");
-		//node = new Node(200,200,40,Color.WHITE);
+				//node = new Node(200,200,40,Color.WHITE);
        	this.addMouseListener(new bListener());
        	this.addMouseMotionListener(new bListener());
+
 	}
 	public void paintComponent (Graphics g){
 		Graphics2D g2d = (Graphics2D) g;
@@ -95,10 +97,11 @@ public class DrawingComponent extends JComponent{
 					//If Save Level is Clicked!
 					if(mx>=280 && mx<=420){
 						System.out.println("Save Level Button Clicked!");
+						saveLevel();
 					}
 				}
 
-
+				//Note: The comments below are only for test.
 				//If the mouse is clicked inside the node
 				// if(node1.isInsideNode(mx,my) == true){
 				// 	System.out.println("Mouse Inside node!");
@@ -131,6 +134,11 @@ public class DrawingComponent extends JComponent{
 			System.out.println(nodes.size());
 		}
 		//Checks if mous is inside node.
+		/*
+			@param	xPos: the x coordinate of the mouse
+					yPos: the y coordiante of the mouse
+					returns if the mouse is currently in the node
+		*/
 		public boolean checkNodes(double xPos, double yPos){
 			boolean var = false;
 			for (int i=0; i<=(nodes.size()-1); i++ ){
@@ -142,6 +150,11 @@ public class DrawingComponent extends JComponent{
 			}
 			return var;
 		}
+		/*
+			@param 	xPos: the x coordinate of the mouse
+					yPos: the y coordinate of the mouse
+					returns the current node selected from the ArrayList
+		*/
 		public int getCurrentNode(double xPos, double yPos){
 			boolean var = false;
 			int currNode = -1;
@@ -157,4 +170,26 @@ public class DrawingComponent extends JComponent{
 			}
 			return currNode;
 		}
-}
+
+		/*
+			Method responsible for saving the level
+		*/
+		public void saveLevel(){
+			try{
+				PrintWriter level = new PrintWriter("level.txt");
+				level.println(nodes.size());
+				level.println("<INSERT NUMBER OF EDGES HERE!>");
+				// //Add number of edges later on
+
+				for (int i=0; i<=(nodes.size()-1); i++ ){
+					level.println((nodes.get(i)).getX() + " " + (nodes.get(i)).getY());
+
+				}
+				level.println("<INSERT THE PAIR OF NODES CONNECTED BY AN EDGE HERE!!!>");
+				level.close();
+			}
+			catch(IOException e){}
+			
+
+		}
+	}
