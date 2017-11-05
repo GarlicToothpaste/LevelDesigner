@@ -8,20 +8,30 @@ import java.io.*;
 public class DrawingComponent extends JComponent{
 	int width, height;
 	Node node1;
-	Buttons addNode,addEdge,saveLevel;
-	ArrayList<Node> nodes = new ArrayList<>();
+	Buttons addNode,addEdge,saveLevel, stopAdding;
+	ArrayList<Node> nodes = new ArrayList<Node>();
+	ArrayList<Integer> connectedNodesColumn1 = new ArrayList<Integer>();
+	ArrayList<Integer> connectedNodesColumn2 = new ArrayList<Integer>();
+
     private Paint Background;
     double mx,my;
     PrintWriter level;
+    boolean add;
+
+    int count;
+    int firstNode;
+    int secondNode;
 	public DrawingComponent(int x, int y){
 		width=x;
 		height=y;
-		Background= Color.BLACK;
-		node1= new Node(400,400,40,Color.WHITE);
-		addNode =new Buttons(20,20,120,30,Color.WHITE,"Add Node");
-		addEdge =new Buttons(150,20,120,30,Color.WHITE,"Add Edge");
+		Background=Color.BLACK;
+		node1 = new Node(400,400,40,Color.WHITE);
+		addNode = new Buttons(20,20,120,30,Color.WHITE,"Add Node");
+		addEdge = new Buttons(150,20,120,30,Color.WHITE,"Add Edge");
+		stopAdding = new Buttons(150,20,120,30,Color.WHITE,"Stop");
 		saveLevel = new Buttons(280,20,140,30,Color.WHITE,"Save Level");
 				//node = new Node(200,200,40,Color.WHITE);
+		add=false;
        	this.addMouseListener(new bListener());
        	this.addMouseMotionListener(new bListener());
 
@@ -35,8 +45,15 @@ public class DrawingComponent extends JComponent{
        	
        	//node1.draw(g2d);
        	addNode.draw(g2d);
-       	addEdge.draw(g2d);
+       	
        	saveLevel.draw(g2d);
+       	if (add==false) {
+       		addEdge.draw(g2d);
+       	}
+       	if (add==true) {
+       		stopAdding.draw(g2d);
+       	}
+       	
        	drawNodes(g2d);
        	repaint();
 	}
@@ -79,7 +96,6 @@ public class DrawingComponent extends JComponent{
 
 			}
 			public void mousePressed(MouseEvent e){
-
 				mx = e.getX();
 				my = e.getY();
 				//If the mouse is clicked inside the buttons
@@ -88,19 +104,59 @@ public class DrawingComponent extends JComponent{
 					if(mx>=20 && mx<=140){
 						addNode();
 						repaint();
-						System.out.println("Add Node Button Clicked!");
+						//System.out.println("Add Node Button Clicked!");
 					}
 					//If add Edge is Clicked
 					if(mx>=150 && mx<=270){
 						System.out.println("Add Edge Button Clicked!");
+						
+						if(add==false){
+							add = true;
+						}
+						else{
+							add = false;
+						}
+						System.out.println(add);
+						repaint();
 					}
 					//If Save Level is Clicked!
 					if(mx>=280 && mx<=420){
-						System.out.println("Save Level Button Clicked!");
 						saveLevel();
+						System.out.println("Save Level Button Clicked!");
 					}
 				}
 
+				//CODE BELOW UNFINISHED
+				//This should be able to select the 2 nodes connected
+				if(add == true){
+					boolean loop = true;
+					if(checkNodes(mx,my)==true){
+						while(loop != false){
+							count = 0;
+							if (count ==0){
+								double rx = e.getX();
+								double ry = e.getY();
+ 								firstNode = getCurrentNode(rx,ry);
+								try{
+									Thread.sleep(10);
+									count = 1;
+								}
+								catch(InterruptedException ex){}
+								double tx = e.getX();
+								double ty = e.getY();
+								if (count == 1){
+									secondNode = getCurrentNode(tx,ty);
+									break;
+								}
+							}
+						}
+
+						System.out.println(firstNode + " " + secondNode);
+						selectConnectedNodes(firstNode,secondNode);
+						count =0;
+						loop = true;
+					}
+				}
 				//Note: The comments below are only for test.
 				//If the mouse is clicked inside the node
 				// if(node1.isInsideNode(mx,my) == true){
@@ -166,11 +222,18 @@ public class DrawingComponent extends JComponent{
 					}
 					break;
 				}
-
 			}
 			return currNode;
 		}
+		public void selectConnectedNodes(int x, int y){
+			int arrCol1 = x;
+			int arrCol2 = y;
+			connectedNodesColumn1.add(arrCol1);
+			connectedNodesColumn2.add(arrCol2);
+		}
+		public void drawEdge(){
 
+		}
 		/*
 			Method responsible for saving the level
 		*/
@@ -178,18 +241,18 @@ public class DrawingComponent extends JComponent{
 			try{
 				PrintWriter level = new PrintWriter("level.txt");
 				level.println(nodes.size());
-				level.println("<INSERT NUMBER OF EDGES HERE!>");
+				levxl.println(connectedNodesColumn1.size());
 				// //Add number of edges later on
 
 				for (int i=0; i<=(nodes.size()-1); i++ ){
 					level.println((nodes.get(i)).getX() + " " + (nodes.get(i)).getY());
 
 				}
-				level.println("<INSERT THE PAIR OF NODES CONNECTED BY AN EDGE HERE!!!>");
+				for(int i=0; i<=(connectedNodesColumn1.size()-1); i++){
+					level.println(connectedNodesColumn1.get(i) + " " + connectedNodesColumn2.get(i));
+				}
 				level.close();
 			}
 			catch(IOException e){}
-			
-
 		}
 	}

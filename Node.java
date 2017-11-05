@@ -37,5 +37,15 @@ public class Node{
     public double getY(){
         return y;
     }
+    public double getCenterX(){
+        double center;
+        center = x + (0.5*radius);
+        return center;
+    }
+    public double getCenterY(){
+        double center;
+        center = y + (0.5*radius);
+        return center;
+    }
 
 }
