@@ -39,12 +39,12 @@ public class Node{
     }
     public double getCenterX(){
         double center;
-        center = x + (0.5*radius);
+        center = x + (radius);
         return center;
     }
     public double getCenterY(){
         double center;
-        center = y + (0.5*radius);
+        center = y + (radius);
         return center;
     }
 

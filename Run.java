@@ -5,8 +5,9 @@ import javax.swing.*;
 public class Run {
 	public static void main(String []args)
 	{
-		int w=800;
-		int h=600;
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int w=(int)screenSize.getHeight()*3/4;
+		int h=(int)screenSize.getHeight()*3/4;
 
 		JFrame f = new JFrame();
 		DrawingComponent dc = new DrawingComponent (w,h);
